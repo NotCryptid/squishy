@@ -19,6 +19,15 @@ async def cleanup():
                 await guild.leave()
         await asyncio.sleep(60)
 
+async def rotate_statuses():
+    statuses = config.get("statuses", [])
+    if not statuses:
+        return
+    while True:
+        for status in statuses:
+            await squishy.change_presence(activity=discord.Game(name=status))
+            await asyncio.sleep(config.get("status-interval", 30))
+
 @squishy.event
 async def on_ready():
     global onreadyIsTheWorstFuckingThingEver
@@ -31,5 +40,16 @@ async def on_ready():
         await squishy.tree.sync(guild=discord.Object(id=squishy.server))
         squishy.loop.create_task(cleanup())
         onreadyIsTheWorstFuckingThingEver = True
+
+@squishy.tree.error
+async def on_app_command_error(interaction: discord.Interaction, error: discord.app_commands.AppCommandError):
+    if isinstance(error, discord.app_commands.errors.MissingPermissions):
+        await interaction.response.send_message(
+            "You don't have permission to use this command.",
+            ephemeral=True
+        )
+    else:
+        # Optional: log or display other errors for debugging
+        await interaction.response.send_message("An unexpected error occurred.", ephemeral=True)
 
 squishy.run(config.get("bot-token", "CHANGEME"))

@@ -43,7 +43,8 @@ I can't afford to host a bot for however many servers to use. And this way, peop
 - - `channel-count` "Watching {channels} channels"
 - - `github` "Watching github.com/enhancedrock/squishy" (would appreciate it if you left this on :3)
 - - `custom-enabled` If your custom status should be included in the rotation
-- - `custom` Your custom status
+- - `custom` Your custom status (Prefix it with p for Playing, l for Listening, w for Watching, s for Streaming)
+- `online` Whether Squishy should be: 1 for Online, 2 for Idle, 3 for Do not Disturb, 4 for Invisible
 - `modules` What modules you'd like enabled
 - - `quotes` See quotes README
 - - `economy` See economy README

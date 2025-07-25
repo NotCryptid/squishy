@@ -94,7 +94,7 @@ class GoodbyeCog(commands.Cog):
     async def on_member_remove(self, member):
         await asyncio.sleep(1)
         async for entry in member.guild.audit_logs(limit=1, action=discord.AuditLogAction.ban):
-            if entry.target.id == member.id:
+            if entry.target.id == member.id and not config.get("banned", {}).get("channel", False):
                 return
         if member.bot:
             return
