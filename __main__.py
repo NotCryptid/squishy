@@ -62,7 +62,7 @@ def extract_and_replace(zip_path, target_folder):
             else:
                 shutil.copy2(s, d)
 
-if not modified and config.get("auto-update", True):
+if config.get("update-checker", True):
     print("Checking for updates...")
     response = requests.get("https://api.github.com/repos/enhancedrock/squishy/releases/latest", timeout=5)
     if response.status_code == 200:
@@ -70,34 +70,42 @@ if not modified and config.get("auto-update", True):
         latest_version = data.get("tag_name", "v0.0.0")
         if latest_version > version:
             print(f"Update available! {version} -> {latest_version}")
-            zip_url = data.get("zipball_url")
-            if zip_url:
-                print("Downloading the latest version...")
+            if not modified and config.get("auto-updater", True):
+                zip_url = data.get("zipball_url")
+                if zip_url:
+                    print("Downloading the latest version...")
+                    try:
+                        zip_response = requests.get(zip_url, timeout=10)
+                        zip_response.raise_for_status()
 
-                try:
-                    zip_response = requests.get(zip_url, timeout=10)
-                    zip_response.raise_for_status()
+                        with tempfile.NamedTemporaryFile(suffix=".zip", delete=False) as tmp_zip:
+                            tmp_zip.write(zip_response.content)
+                            tmp_zip_path = tmp_zip.name
 
-                    with tempfile.NamedTemporaryFile(suffix=".zip", delete=False) as tmp_zip:
-                        tmp_zip.write(zip_response.content)
-                        tmp_zip_path = tmp_zip.name
+                        # Replace the contents of the current directory
+                        current_dir = os.path.dirname(__file__)
+                        extract_and_replace(tmp_zip_path, current_dir)                    
 
-                    # Replace the contents of the current directory
-                    current_dir = os.path.dirname(__file__)
-                    extract_and_replace(tmp_zip_path, current_dir)
+                        # Run cleanup script (if exists)
+                        if os.path.isfile(os.path.join(os.path.dirname(__file__), "CLEANUP.py")):
+                            print("CLEANUP.py was included with this release, skipping cleanup.")
+                            subprocess.run([sys.executable, "CLEANUP.py"] + sys.argv[1:], cwd=os.path.dirname(__file__), check=True)
+                        else:
+                            print("CLEANUP.py not found, skipping cleanup.")
 
-                    print("Update complete! Restarting now...\n")
+                        print("Update complete! Restarting now...\n")
 
-                    # Restart the script in-place
-                    python_executable = sys.executable
-                    script_path = os.path.abspath(sys.argv[0])
-                    os.execv(python_executable, [python_executable, script_path] + sys.argv[1:])
+                        # Restart the script in-place
+                        python_executable = sys.executable
+                        script_path = os.path.abspath(sys.argv[0])
+                        os.execv(python_executable, [python_executable, script_path] + sys.argv[1:])
 
-                except Exception as e:
-                    print(f"Failed to download or extract update: {e}")
-
+                    except Exception as e:
+                        print(f"Failed to download or extract update: {e}")
+                else:
+                    print("Failed to find the download URL for the latest version.")
             else:
-                print("Failed to find the download URL for the latest version.")
+                print("Auto-updater is disabled or you are using a modified version of Squishy. Please update manually by downloading the latest release from Github.")
         elif latest_version < version:
             print(f"You are using a newer version ({version}) than the latest release ({latest_version}). Wait, what? Don't tell me you touched the variable that says \033[1mdo NOT touch\033[0m..")
         else:
@@ -105,4 +113,7 @@ if not modified and config.get("auto-update", True):
     else:
         print(f"Failed to fetch release info: {response.status_code}")
 else:
-    print("This version of Squishy is marked as modified. Skipping update check.")
+    print("Update checking is disabled in the config.json. If you want to enable it, set 'update-checker' to true in the config.json file.")
+
+print("\n\033[1mStarting Squishy...\033[0m\n")
+subprocess.run([sys.executable, "squishy.py"] + sys.argv[1:], cwd=os.path.dirname(__file__), check=True)

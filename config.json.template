@@ -1,24 +1,26 @@
 {
     "bot-token": "CHANGEME",
+    "server-id": 0,
+    "update-checker": true,
     "auto-updater": true,
     "status-interval": 30,
     "statuses": {
         "member-count": true,
         "role-count": true,
         "channel-count": true,
+        "github": true,
         "custom-enabled": false,
-        "custom": "This will be included in the rotation of Squishy's statuses when enabled. See 'custom-enabled'."
+        "custom": "This will be included in the rotation of Squishy's statuses when enabled. See the README."
     },
     "modules": {
         "quotes": false,
         "economy": false,
         "stars": false,
-        "music": false,
         "moderation": false,
         "levelling": false,
-        "gambling": false,
-        "welcomer": false,
-        "misc": false
+        "fun": false,
+        "welcome": false,
+        "customs": false
     },
-    "quotes": ["If Squishy's quotes module is enabled, place some quotes here for her to say when pinged."]
+    "analytics": false
 }
