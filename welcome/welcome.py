@@ -31,7 +31,7 @@ class WelcomeCog(commands.Cog):
             "user.avatar": member.display_avatar.url if member.display_avatar else f"https://cdn.discordapp.com/embed/avatars/{int(member.id) % 5}.png",
             "server.name": member.guild.name,
             "server.id": member.guild.id,
-            "server.icon": member.guild.icon.url if member.guild.icon else "",
+            "server.icon": member.guild.icon.url if member.guild.icon else "https://cdn.discordapp.com/embed/avatars/1.png",
             "membercount": member.guild.member_count,
             "membercount.format": self.ordinal(member.guild.member_count),
             "time": int(discord.utils.utcnow().timestamp()),
@@ -47,14 +47,14 @@ class WelcomeCog(commands.Cog):
             return
         channel = member.guild.get_channel(config.get("welcome", {}).get("channel-id", 0))
         if config.get("welcome", {}).get("channel", False) and channel and isinstance(channel, discord.TextChannel):
-            message = self.replace_variables(config.get("welcome", {}).get("content", ""), member) if config.get("welcome", {}).get("content") else ""
+            message = self.replace_variables(config.get("welcome", {}).get("content", ""), member)
             embeds = [discord.Embed.from_dict(embed) for embed in json.loads(self.replace_variables(json.dumps(config["welcome"]["embeds"]), member))] if "embeds" in config.get("welcome", {}) else None
             await channel.send(message, embeds=embeds)
         else:
             print(f"Welcome channel not found or not a text channel in {member.guild.name} ({member.guild.id})")
         if config.get("welcome", {}).get("dm", False):
             try:
-                message = self.replace_variables(config.get("welcome", {}).get("dm", {}).get("content", ""), member) if config.get("welcome", {}).get("dm", {}).get("content") else ""
+                message = self.replace_variables(config.get("welcome", {}).get("dm", {}).get("content", ""), member)
                 embeds = [discord.Embed.from_dict(embed) for embed in json.loads(self.replace_variables(json.dumps(config["welcome"]["dm"]["embeds"]), member))] if "embeds" in config.get("welcome", {}).get("dm", {}) else None
                 await member.send(message, embeds=embeds)
             except discord.Forbidden:
@@ -92,15 +92,15 @@ class GoodbyeCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        await asyncio.sleep(1)
-        async for entry in member.guild.audit_logs(limit=1, action=discord.AuditLogAction.ban):
+        await asyncio.sleep(3)
+        async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.ban):
             if entry.target.id == member.id and not config.get("banned", {}).get("channel", False):
                 return
         if member.bot:
             return
         channel = member.guild.get_channel(config.get("goodbye", {}).get("channel-id", 0))
         if config.get("goodbye", {}).get("channel", False) and channel and isinstance(channel, discord.TextChannel):
-            message = self.replace_variables(config.get("goodbye", {}).get("content", ""), member) if config.get("goodbye", {}).get("content") else ""
+            message = self.replace_variables(config.get("goodbye", {}).get("content", ""), member)
             embeds = [discord.Embed.from_dict(embed) for embed in json.loads(self.replace_variables(json.dumps(config["goodbye"]["embeds"]), member))] if "embeds" in config.get("goodbye", {}) else None
             await channel.send(message, embeds=embeds)
         else:
@@ -142,7 +142,7 @@ class BannedCog(commands.Cog):
             return
         channel = user.guild.get_channel(config.get("banned", {}).get("channel-id", 0))
         if config.get("banned", {}).get("channel", False) and channel and isinstance(channel, discord.TextChannel):
-            message = self.replace_variables(config.get("banned", {}).get("content", ""), user) if config.get("banned", {}).get("content") else ""
+            message = self.replace_variables(config.get("banned", {}).get("content", ""), user)
             embeds = [discord.Embed.from_dict(embed) for embed in json.loads(self.replace_variables(json.dumps(config["banned"]["embeds"]), user))] if "embeds" in config.get("banned", {}) else None
             await channel.send(message, embeds=embeds)
         else:

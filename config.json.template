@@ -6,21 +6,25 @@
     "status-interval": 30,
     "statuses": {
         "member-count": true,
-        "role-count": true,
+        "role-count": false,
         "channel-count": true,
         "github": true,
         "custom-enabled": false,
+        "custom-type": 1,
         "custom": "This will be included in the rotation of Squishy's statuses when enabled. See the README."
     },
+    "online": 1,
     "modules": {
-        "quotes": false,
+        "catchphrase": false,
         "economy": false,
         "stars": false,
         "moderation": false,
         "levelling": false,
         "fun": false,
         "welcome": false,
+        "autoroles": false,
+        "reactroles": false,
+        "messagebuilder": false,
         "customs": false
-    },
-    "analytics": false
+    }
 }
