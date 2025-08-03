@@ -1,6 +1,11 @@
-# Squishy
-The cutest<sup>*</sup> free, open source, fully expandable, and self-hostable Discord bot. Designed to provide all the features you could ever need, with moderation, economy, minigames, levelling, and more.
+<h1 align="center">
+<img width="75" src="https://raw.githubusercontent.com/enhancedrock/enhancedrock/refs/heads/main/squishypfp.png" alt="Squishy, a blue slime girl character by @enhancedrock">
 
+squishy
+</h1>
+<p align="center">
+The cutest<sup>*</sup> free, open source, fully expandable, and self-hostable Discord bot. Designed to provide all the features you could ever need, with moderation, economy, minigames, levelling, and more.
+</p>
 <sup>*In my objective opinion</sup>
 
 ## Why FOSS?
@@ -35,7 +40,7 @@ I can't afford to host a bot for however many servers to use. And this way, peop
 12. Open a terminal in the the `squishy` folder and run `python3 -m venv .`
 
 ## Running Squishy
-That's it! From now on, just run `python3 squishy` in the directory before Squishy, or run `python3 .` in the Squishy directory to start her.
+That's it! CD into her directory, activate the virtual enviornment and run `python3 .` to start her.
 
 ## Config
 
