@@ -388,7 +388,8 @@ class Economy():
             CREATE TABLE IF NOT EXISTS ECONOMY (
                 user_id INTEGER PRIMARY KEY,
                 balance INTEGER DEFAULT 0,
-                purchases TEXT DEFAULT ''
+                purchases TEXT DEFAULT '',
+                stars INTEGER DEFAULT 0
             )
             """)
             cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
@@ -410,7 +411,8 @@ class Economy():
             CREATE TABLE IF NOT EXISTS ECONOMY (
                 user_id INTEGER PRIMARY KEY,
                 balance INTEGER DEFAULT 0,
-                purchases TEXT DEFAULT ''
+                purchases TEXT DEFAULT '',
+                stars INTEGER DEFAULT 0
             )
             """)
             cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
@@ -432,7 +434,8 @@ class Economy():
             CREATE TABLE IF NOT EXISTS ECONOMY (
                 user_id INTEGER PRIMARY KEY,
                 balance INTEGER DEFAULT 0,
-                purchases TEXT DEFAULT ''
+                purchases TEXT DEFAULT '',
+                stars INTEGER DEFAULT 0
             )
             """)
             cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
@@ -454,7 +457,8 @@ class Economy():
             CREATE TABLE IF NOT EXISTS ECONOMY (
                 user_id INTEGER PRIMARY KEY,
                 balance INTEGER DEFAULT 0,
-                purchases TEXT DEFAULT ''
+                purchases TEXT DEFAULT '',
+                stars INTEGER DEFAULT 0
             )
             """)
             cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
@@ -463,6 +467,75 @@ class Economy():
                 cursor.execute("INSERT INTO ECONOMY (user_id) VALUES (?)", (memberid,))
                 db.commit()
             cursor.execute("UPDATE ECONOMY SET balance = MAX(balance - ?, 0) WHERE user_id = ?", (amount, memberid))
+            db.commit()
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    # Get a member's stars
+    def getstars(self, memberid: int):
+        try:
+            db = sqlite3.connect('userdata.db')
+            cursor = db.cursor()
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ECONOMY (
+                user_id INTEGER PRIMARY KEY,
+                balance INTEGER DEFAULT 0,
+                purchases TEXT DEFAULT '',
+                stars INTEGER DEFAULT 0
+            )
+            """)
+            cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
+            exists = cursor.fetchone()
+            if not exists:
+                cursor.execute("INSERT INTO ECONOMY (user_id) VALUES (?)", (memberid,))
+                db.commit()
+            cursor.execute("SELECT stars FROM ECONOMY WHERE user_id = ?", (memberid,))
+            return(cursor.fetchone()[0])
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    # Add to a member's stars
+    def addstars(self, memberid: int, amount: int):
+        try:
+            db = sqlite3.connect('userdata.db')
+            cursor = db.cursor()
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ECONOMY (
+                user_id INTEGER PRIMARY KEY,
+                balance INTEGER DEFAULT 0,
+                purchases TEXT DEFAULT '',
+                stars INTEGER DEFAULT 0
+            )
+            """)
+            cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
+            exists = cursor.fetchone()
+            if not exists:
+                cursor.execute("INSERT INTO ECONOMY (user_id) VALUES (?)", (memberid,))
+                db.commit()
+            cursor.execute("UPDATE ECONOMY SET stars = stars + ? WHERE user_id = ?", (amount, memberid))
+            db.commit()
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    # Take from a member's stars
+    def takestars(self, memberid: int, amount: int):
+        try:
+            db = sqlite3.connect('userdata.db')
+            cursor = db.cursor()
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ECONOMY (
+                user_id INTEGER PRIMARY KEY,
+                balance INTEGER DEFAULT 0,
+                purchases TEXT DEFAULT '',
+                stars INTEGER DEFAULT 0
+            )
+            """)
+            cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
+            exists = cursor.fetchone()
+            if not exists:
+                cursor.execute("INSERT INTO ECONOMY (user_id) VALUES (?)", (memberid,))
+                db.commit()
+            cursor.execute("UPDATE ECONOMY SET stars = MAX(stars - ?, 0) WHERE user_id = ?", (amount, memberid))
             db.commit()
         except sqlite3.Error as error:
             print(f"SQL ERROR: {error}")
@@ -478,7 +551,8 @@ class Economy():
             CREATE TABLE IF NOT EXISTS ECONOMY (
                 user_id INTEGER PRIMARY KEY,
                 balance INTEGER DEFAULT 0,
-                purchases TEXT DEFAULT ''
+                purchases TEXT DEFAULT '',
+                stars INTEGER DEFAULT 0
             )
             """)
             cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))

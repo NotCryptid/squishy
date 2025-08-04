@@ -206,7 +206,7 @@ class EconomyCog(commands.Cog):
 async def setup(squishy) -> None:
     print("Loading economy extension...")
     if not os.path.isfile(config_path):
-        print("\033[31;1mA config.json for welcome was not found!! The module will disable itself now.\033[0m Please read the README for setup instructions.")
+        print("\033[31;1mA config.json for economy was not found!! The module will disable itself now.\033[0m Please read the README for setup instructions.")
         return
     await squishy.add_cog(EconomyCog(squishy))
     print("EconomyCog loaded")

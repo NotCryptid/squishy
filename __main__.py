@@ -127,21 +127,3 @@ else:
 # Time to start!
 print("\n\033[1mStarting Squishy...\033[0m\n")
 subprocess.run([sys.executable, "squishy.py"] + sys.argv[1:], cwd=os.path.dirname(__file__), check=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Hey, what're you doing down here...?

@@ -115,6 +115,12 @@ async def on_ready():
             await squishy.load_extension("welcome.welcome")
         if config.get("modules", {}).get("levelling", False):
             await squishy.load_extension("levelling.levelling")
+        if config.get("modules", {}).get("autoroles", False):
+            await squishy.load_extension("autoroles.autoroles")
+        if config.get("modules", {}).get("messagebuilder", False):
+            await squishy.load_extension("messagebuilder.messagebuilder")
+        if config.get("modules", {}).get("stars", False):
+            await squishy.load_extension("stars.stars")
         if config.get("modules", {}).get("customs", False):
             premain_path = os.path.join(os.path.dirname(__file__), "customs", "premain")
             if os.path.isdir(premain_path):

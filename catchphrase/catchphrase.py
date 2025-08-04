@@ -7,7 +7,7 @@ from discord import app_commands
 
 config_path = os.path.join(os.path.dirname(__file__), "config.json")
 if not os.path.isfile(config_path):
-    print("\033[31;1mA config.json for quotes was not found!!\033[0m Please read the README for setup instructions.")
+    print("\033[31;1mA config.json for catchphrase was not found!!\033[0m Please read the README for setup instructions.")
 
 with open(config_path, "r", encoding="utf-8") as config_file:
     config = json.load(config_file)
@@ -119,9 +119,9 @@ class CatchphraseCog(commands.Cog):
             await message.reply("\n".join([config.get("prefix", ""), random.choice(quotes) + config.get("suffix", "")]))
 
 async def setup(squishy) -> None:
-    print("Loading quotes extension...")
+    print("Loading catchphrase extension...")
     if not os.path.isfile(config_path):
-        print("\033[31;1mA config.json for welcome was not found!! The module will disable itself now.\033[0m Please read the README for setup instructions.")
+        print("\033[31;1mA config.json for catchphrase was not found!! The module will disable itself now.\033[0m Please read the README for setup instructions.")
         return
     await squishy.add_cog(CatchphraseCog(squishy))
     print("CatchphraseCog loaded")
