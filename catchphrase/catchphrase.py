@@ -32,36 +32,36 @@ class CatchphraseCog(commands.Cog):
             if current.lower() in quote.lower()
         ][:25]
 
-    @group.command(name="reload", description="Reload the catchphrase configuration")
+    @group.command(name="reload", description="reload the catchphrase configuration")
     @app_commands.checks.has_permissions(manage_guild=True)
     async def reload(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True)
         if self.lock:
-            await interaction.followup.send("Somebody's got a lock on the Catchphrase config. Wait a sec, and try again.", ephemeral=True)
+            await interaction.followup.send("somebody's got a lock on the catchphrase config. wait a sec, and try againw", ephemeral=True)
             return
         self.lock = True
         global config
         if not os.path.isfile(config_path):
-            await interaction.response.send("A config.json for catchphrase was not found!! Please read the README for setup instructions.", ephemeral=True)
+            await interaction.response.send("a config.json for catchphrase was not found!! please read the README for setup instructions", ephemeral=True)
             self.lock = False
             return
         with open(config_path, "r", encoding="utf-8") as config_file:
             config = json.load(config_file)
         print(f"{interaction.user.name} ({interaction.user.id}) reloaded the quotes configuration.")
-        await interaction.followup.send("Catchphrase configuration reloaded successfully.", ephemeral=True)
+        await interaction.followup.send("catchphrase configuration reloaded successfully", ephemeral=True)
         self.lock = False
 
-    @group.command(name="add", description="Add a new line")
-    @app_commands.describe(quote="The line to add")
+    @group.command(name="add", description="add a new line")
+    @app_commands.describe(quote="the line to add")
     @app_commands.checks.has_permissions(manage_guild=True)
     async def add(self, interaction: discord.Interaction, quote: str):
         await interaction.response.defer(ephemeral=True)
         if self.lock:
-            await interaction.followup.send("Somebody's got a lock on the Catchphrase config. Wait a sec, and try again.", ephemeral=True)
+            await interaction.followup.send("somebody's got a lock on the catchphrase config. wait a sec, and try again", ephemeral=True)
             return
         self.lock = True
         if not os.path.isfile(config_path):
-            await interaction.followup.send("A config.json for catchphrase was not found!! Please read the README for setup instructions.", ephemeral=True)
+            await interaction.followup.send("a config.json for catchphrase was not found!! please read the README for setup instructions", ephemeral=True)
             self.lock = False
             return
         if "quotes" not in config:
@@ -70,17 +70,17 @@ class CatchphraseCog(commands.Cog):
         with open(config_path, "w", encoding="utf-8") as config_file:
             json.dump(config, config_file, indent=4)
         print(f"{interaction.user.name} ({interaction.user.id}) added a new quote: {quote}")
-        await interaction.followup.send(f"Catchphrase added: {quote}", ephemeral=True)
+        await interaction.followup.send(f"catchphrase added: {quote}", ephemeral=True)
         self.lock = False
 
-    @group.command(name="remove", description="Remove a line")
+    @group.command(name="remove", description="remove a line")
     @app_commands.autocomplete(index=quote_autocomplete)
-    @app_commands.describe(index="The line to remove")
+    @app_commands.describe(index="the line to remove")
     @app_commands.checks.has_permissions(manage_guild=True)
     async def remove(self, interaction: discord.Interaction, index: str):
         await interaction.response.defer(ephemeral=True)
         if self.lock:
-            await interaction.followup.send("Somebody's got a lock on the Catchphrase config. Wait a sec, and try again.", ephemeral=True)
+            await interaction.followup.send("somebody's got a lock on the catchphrase config. Wait a sec, and try again.", ephemeral=True)
             return
         self.lock = True
         if not os.path.isfile(config_path):

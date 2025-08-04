@@ -1,5 +1,3 @@
-# TODO Fix status type 3?
-
 import os
 import json
 import asyncio
@@ -98,12 +96,36 @@ async def on_ready():
     global onreadyIsTheWorstFuckingThingEver
     if not onreadyIsTheWorstFuckingThingEver:
         print(f"Logged in as {squishy.user.name} ({squishy.user.id})")
+        if config.get("modules", {}).get("customs", False):
+            premain_path = os.path.join(os.path.dirname(__file__), "customs", "premain")
+            if os.path.isdir(premain_path):
+                for file in sorted(os.listdir(premain_path)):
+                    if file.endswith(".py") and not file.startswith("-"):
+                        ext_path = f"customs.premain.{file[:-3]}"
+                        try:
+                            await squishy.load_extension(ext_path)
+                            print(f"Loading premain extension: {ext_path}")
+                        except Exception as e:
+                            print(f"Failed to load premain extension {ext_path}: {e}")
+        if config.get("modules", {}).get("economy", False):
+            await squishy.load_extension("economy.economy")
         if config.get("modules", {}).get("catchphrase", False):
             await squishy.load_extension("catchphrase.catchphrase")
         if config.get("modules", {}).get("welcome", False):
             await squishy.load_extension("welcome.welcome")
         if config.get("modules", {}).get("levelling", False):
             await squishy.load_extension("levelling.levelling")
+        if config.get("modules", {}).get("customs", False):
+            premain_path = os.path.join(os.path.dirname(__file__), "customs", "premain")
+            if os.path.isdir(premain_path):
+                for file in sorted(os.listdir(premain_path)):
+                    if file.endswith(".py") and not file.startswith("-"):
+                        ext_path = f"customs.premain.{file[:-3]}"
+                        try:
+                            await squishy.load_extension(ext_path)
+                            print(f"Loading postmain extension: {ext_path}")
+                        except Exception as e:
+                            print(f"Failed to load postmain extension {ext_path}: {e}")
         await squishy.tree.sync(guild=discord.Object(id=squishy.server))
         online_status = config.get("online", 1)
         status_map = {
@@ -121,12 +143,17 @@ async def on_ready():
 @squishy.tree.error
 async def on_app_command_error(interaction: discord.Interaction, error: discord.app_commands.AppCommandError):
     if isinstance(error, discord.app_commands.errors.MissingPermissions):
-        await interaction.response.send_message(
+        await interaction.followup.send(
             "You don't have permission to use this command.",
             ephemeral=True
         )
     else:
-        # Optional: log or display other errors for debugging
-        await interaction.response.send_message("An unexpected error occurred.", ephemeral=True)
+        # Print full traceback to the console should something go wrong
+        import traceback
+        traceback.print_exception(type(error), error, error.__traceback__)
+        try:
+            await interaction.followup.send("Something went wrong while running the command! The admin has been notified.", ephemeral=True)
+        except discord.InteractionResponded:
+            pass
 
 squishy.run(config.get("bot-token", "CHANGEME"))

@@ -4,6 +4,7 @@ userdata.db
 assets/*
 customs/postmain/*
 customs/premain/*
+customs/scripts/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

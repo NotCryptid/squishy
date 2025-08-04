@@ -376,3 +376,145 @@ class Levelling():
             return [row[0] for row in cursor.fetchall()]
         except sqlite3.Error as error:
             print(f"SQL ERROR: {error}")
+
+
+class Economy():
+    # Get a member's balance
+    def getbal(self, memberid: int):
+        try:
+            db = sqlite3.connect('userdata.db')
+            cursor = db.cursor()
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ECONOMY (
+                user_id INTEGER PRIMARY KEY,
+                balance INTEGER DEFAULT 0,
+                purchases TEXT DEFAULT ''
+            )
+            """)
+            cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
+            exists = cursor.fetchone()
+            if not exists:
+                cursor.execute("INSERT INTO ECONOMY (user_id) VALUES (?)", (memberid,))
+                db.commit()
+            cursor.execute("SELECT balance FROM ECONOMY WHERE user_id = ?", (memberid,))
+            return(cursor.fetchone()[0])
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    # Set a member's balance
+    def setbal(self, memberid: int, amount: int):
+        try:
+            db = sqlite3.connect('userdata.db')
+            cursor = db.cursor()
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ECONOMY (
+                user_id INTEGER PRIMARY KEY,
+                balance INTEGER DEFAULT 0,
+                purchases TEXT DEFAULT ''
+            )
+            """)
+            cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
+            exists = cursor.fetchone()
+            if not exists:
+                cursor.execute("INSERT INTO ECONOMY (user_id) VALUES (?)", (memberid,))
+                db.commit()
+            cursor.execute("UPDATE ECONOMY SET balance = MAX(?, 0) WHERE user_id = ?", (amount, memberid))
+            db.commit()
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    # Add to a member's balance
+    def addbal(self, memberid: int, amount: int):
+        try:
+            db = sqlite3.connect('userdata.db')
+            cursor = db.cursor()
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ECONOMY (
+                user_id INTEGER PRIMARY KEY,
+                balance INTEGER DEFAULT 0,
+                purchases TEXT DEFAULT ''
+            )
+            """)
+            cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
+            exists = cursor.fetchone()
+            if not exists:
+                cursor.execute("INSERT INTO ECONOMY (user_id) VALUES (?)", (memberid,))
+                db.commit()
+            cursor.execute("UPDATE ECONOMY SET balance = balance + ? WHERE user_id = ?", (amount, memberid))
+            db.commit()
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    # Take from a member's balance
+    def takebal(self, memberid: int, amount: int):
+        try:
+            db = sqlite3.connect('userdata.db')
+            cursor = db.cursor()
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ECONOMY (
+                user_id INTEGER PRIMARY KEY,
+                balance INTEGER DEFAULT 0,
+                purchases TEXT DEFAULT ''
+            )
+            """)
+            cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
+            exists = cursor.fetchone()
+            if not exists:
+                cursor.execute("INSERT INTO ECONOMY (user_id) VALUES (?)", (memberid,))
+                db.commit()
+            cursor.execute("UPDATE ECONOMY SET balance = MAX(balance - ?, 0) WHERE user_id = ?", (amount, memberid))
+            db.commit()
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    import json
+
+    # Get a member's purchases
+    def getpurchase(self, memberid: int):
+        try:
+            db = sqlite3.connect('userdata.db')
+            cursor = db.cursor()
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ECONOMY (
+                user_id INTEGER PRIMARY KEY,
+                balance INTEGER DEFAULT 0,
+                purchases TEXT DEFAULT ''
+            )
+            """)
+            cursor.execute("SELECT 1 FROM ECONOMY WHERE user_id = ?", (memberid,))
+            exists = cursor.fetchone()
+            if not exists:
+                cursor.execute("INSERT INTO ECONOMY (user_id) VALUES (?)", (memberid,))
+                db.commit()
+            cursor.execute("SELECT purchases FROM ECONOMY WHERE user_id = ?", (memberid,))
+            result = cursor.fetchone()[0]
+            return self.json.loads(result) if result else []
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    # Add an item to a member's purchases
+    def addpurchase(self, memberid: int, item: str):
+        try:
+            purchases = self.getpurchase(memberid)
+            purchases.append(item)
+            db = sqlite3.connect('userdata.db')
+            cursor = db.cursor()
+            cursor.execute("UPDATE ECONOMY SET purchases = ? WHERE user_id = ?", (self.json.dumps(purchases), memberid))
+            db.commit()
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    # Remove an item from a member's purchases
+    def takepurchase(self, memberid: int, item: str):
+        try:
+            purchases = self.getpurchase(memberid)
+            if item in purchases:
+                purchases.remove(item)
+                db = sqlite3.connect('userdata.db')
+                cursor = db.cursor()
+                cursor.execute("UPDATE ECONOMY SET purchases = ? WHERE user_id = ?", (self.json.dumps(purchases), memberid))
+                db.commit()
+        except sqlite3.Error as error:
+            print(f"SQL ERROR: {error}")
+
+    
