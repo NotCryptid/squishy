@@ -31,7 +31,7 @@ else:
     print("\033[31;1mA requirements.txt was not found!!\033[0m Please ensure you didn't delete or rename the file, you can grab it off of the Github repository if it's missing.\nThe program will now exit.")
     exit()
 
-VERSION = "v2.0.2" # do NOT touch this.
+VERSION = "v2.0.1" # do NOT touch this.
 MODIFIED = False # if you're using your own/a modified version of Squishy, set this to True
 
 print(f"\n\033[1mHaiii!!\033[0m\n\033[3mSquishy {VERSION}\033[0m\nMade by \033[31;1mEnhanced Rock\033[0m\n") # as per the NOTICE, you may not remove this attribution
