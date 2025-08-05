@@ -4,9 +4,9 @@
 squishy
 </h1>
 <p align="center">
-The cutest<sup>*</sup> free, open source, fully expandable, and self-hostable Discord bot. Designed to provide all the features you could ever need, with moderation, economy, minigames, levelling, and more.
+The cutest<sup>*</sup> free, open source, fully expandable, and self-hostable Discord bot. Designed to provide all the features you could ever need such as an economy, minigames, levelling, and more.
 </p>
-<sup>*In my objective opinion</sup>
+<sup>*In my subjective opinion</sup>
 
 ## Why FOSS?
 
@@ -15,6 +15,10 @@ I believe it presents new opportunities for me, Squishy, and the servers I/other
 ## Why not host her, and allow people to add her to their server?
 
 I can't afford to host a bot for however many servers to use. And this way, people can customise her code to add their own features or things they would like for their server (although under the AGPL-3.0 license, the modified source code must be made public to users of your version of the bot).
+
+## Hey, you said this could do everything I need, but there's no moderation!
+
+Use Wick. It's the perfect moderation bot. If you really want it to be a part of Squishy, feel free to write an addon! Upload it to github/make a PR to add it to the bot if you want, too.
 
 ## Setup
 

@@ -109,6 +109,8 @@ async def on_ready():
                             print(f"Failed to load premain extension {ext_path}: {e}")
         if config.get("modules", {}).get("economy", False):
             await squishy.load_extension("economy.economy")
+        if config.get("modules", {}).get("economy", False) and config.get("modules", {}).get("fun", False):
+            await squishy.load_extension("fun.fun")
         if config.get("modules", {}).get("catchphrase", False):
             await squishy.load_extension("catchphrase.catchphrase")
         if config.get("modules", {}).get("welcome", False):
@@ -117,6 +119,8 @@ async def on_ready():
             await squishy.load_extension("levelling.levelling")
         if config.get("modules", {}).get("autoroles", False):
             await squishy.load_extension("autoroles.autoroles")
+        if config.get("modules", {}).get("reactroles", False):
+            await squishy.load_extension("reactroles.reactroles")
         if config.get("modules", {}).get("messagebuilder", False):
             await squishy.load_extension("messagebuilder.messagebuilder")
         if config.get("modules", {}).get("stars", False):
